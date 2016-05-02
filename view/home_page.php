@@ -21,10 +21,6 @@
         <div class="row mui-panel" id="the_menu">
             <h1 id="title">Welcome to My_Mini_Tweet !!</h1>
         </div>
-  </div>
-</div>
-<span id="project_path"></span>
-<span id="original_path"></span>
-<span id="current_path"></span>
+    </div>
 </body>
 </html>
