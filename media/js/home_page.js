@@ -75,7 +75,7 @@ $(document).ready(function(){
 		}
 		$("#div_error").html(error_inscription);
 		if (error_inscription === "") {
-			$.post(path_to_ajax, {action: 'inscription', user_lastname: user_lastname, user_firstname: user_firstname, user_email: user_email, user_username: user_username, user_pass: user_pass}, function(data, textStatus) {
+			$.post(path_to_ajax, {action: 'inscription', user_lastname: user_lastname, user_firstname: user_firstname, user_email: user_email, user_username: user_username, user_pass: user_pass, user_confirm_pass: user_confirm_pass}, function(data, textStatus) {
 				if (textStatus === "success") {
 					data = JSON.parse(data);
 					console.log(data);
