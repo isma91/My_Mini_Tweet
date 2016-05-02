@@ -11,19 +11,19 @@ class UsersController extends User
 		if (!isset($_SESSION['id']) && !isset($_SESSION['token'])) {
 			return false;
 		}
-		$get = $bdd->getBdd()->prepare('SELECT id, token, name FROM users WHERE id = :id AND token = :token');
+		$get = $bdd->getBdd()->prepare('SELECT id, token, login FROM users WHERE id = :id AND token = :token');
 		$get->bindParam(':id', $_SESSION['id']);
 		$get->bindParam(':token', $_SESSION['token']);
 		$get->execute();
 
 		$user = $get->fetch(\PDO::FETCH_ASSOC);
 		if ($user) {
-			$_SESSION['name'] = $user['name'];
+			$_SESSION['login'] = $user['login'];
 			return true;
 		}
 	}
 
-	public function create ($username, $lastname, $firstname, $pass, $confirm_pass, $email)
+	public function create ($lastname, $firstname, $login, $email, $pass, $confirm_pass)
 	{
 		$bdd = new Bdd();
 
@@ -37,8 +37,8 @@ class UsersController extends User
 
 		$pass = $this->_hashPassword($pass);
 
-		if (!$this->_updateCheckUsername($username)) {
-			$this->setError('Username already in use');
+		if (!$this->_updateCheckLogin($login)) {
+			$this->setError('Login already in use');
 			return false;
 		}
 		if (!$this->_updateCheckEmail($email)) {
@@ -46,12 +46,12 @@ class UsersController extends User
 			return false;
 		}
 
-		$create = $bdd->getBdd()->prepare('INSERT INTO users (name, firstname, lastname, email, pass, created_at) VALUES (:name, :firstname, :lastname, :email, :pass, NOW())');
-		$create->bindParam(':name', $username, \PDO::PARAM_STR, 16);
-		$create->bindParam(':lastname', $lastname, \PDO::PARAM_STR, 50);
-		$create->bindParam(':firstname', $firstname, \PDO::PARAM_STR, 50);
-		$create->bindParam(':email', $email, \PDO::PARAM_STR, 60);
-		$create->bindParam(':pass', $pass, \PDO::PARAM_STR, 255);
+		$create = $bdd->getBdd()->prepare('INSERT INTO users (login, firstname, lastname, email, pass, created_at) VALUES (:login, :firstname, :lastname, :email, :pass, NOW())');
+		$create->bindParam(':login', $login);
+		$create->bindParam(':lastname', $lastname);
+		$create->bindParam(':firstname', $firstname);
+		$create->bindParam(':email', $email);
+		$create->bindParam(':pass', $pass);
 		if ($create->execute()) {
 			$this->setError('Congrats ! You can connect');
 			return true;
@@ -60,12 +60,12 @@ class UsersController extends User
 
 	}
 
-	public function update ($username, $email, $lastname, $firstname)
+	public function update ($login, $email, $lastname, $firstname)
 	{
 		$bdd = new Bdd();
 		
-		if (!$this->_updateCheckUsername($username)) {
-			$this->setError('Username already in use');
+		if (!$this->_updateCheckLogin($login)) {
+			$this->setError('Login already in use');
 			return false;
 		}
 		if (!$this->_updateCheckEmail($email)) {
@@ -73,11 +73,11 @@ class UsersController extends User
 			return false;
 		}
 
-		$update = $bdd->getBdd()->prepare('UPDATE users SET name = :name, email = :email, lastname = :lastname, firstname = :firstname, updated_at = NOW() WHERE id = :id AND token = :token AND active = 1');
-		$update->bindParam(':name', $username, \PDO::PARAM_STR, 16);
-		$update->bindParam(':email', $email, \PDO::PARAM_STR, 60);
-		$update->bindParam(':lastname', $lastname, \PDO::PARAM_STR, 60);
-		$update->bindParam(':firstname', $firstname, \PDO::PARAM_STR, 60);
+		$update = $bdd->getBdd()->prepare('UPDATE users SET login = :login, email = :email, lastname = :lastname, firstname = :firstname, updated_at = NOW() WHERE id = :id AND token = :token AND active = 1');
+		$update->bindParam(':login', $login);
+		$update->bindParam(':email', $email);
+		$update->bindParam(':lastname', $lastname);
+		$update->bindParam(':firstname', $firstname);
 		$update->bindParam(':id', $_SESSION['id']);
 		$update->bindParam(':token', $_SESSION['token']);
 		if ($update->execute()) {
@@ -120,8 +120,8 @@ class UsersController extends User
 	{
 		$bdd = new Bdd();
 
-		$getUser = $bdd->getBdd()->prepare('SELECT id, password FROM users WHERE (name = :login OR email = :login) AND active = 1');
-		$getUser->bindParam(':login', $login, \PDO::PARAM_STR);
+		$getUser = $bdd->getBdd()->prepare('SELECT id, password FROM users WHERE (login = :login OR email = :login) AND active = 1');
+		$getUser->bindParam(':login', $login);
 		$getUser->execute();
 
 		$user = $getUser->fetch(\PDO::FETCH_ASSOC);
@@ -140,22 +140,6 @@ class UsersController extends User
 		$this->_updateToken($user['id']);
 
 		return true;
-	}
-
-	public function getUserById ($id)
-	{
-		$bdd = new Bdd();
-
-		$getUser = $bdd->getBdd()->prepare('SELECT lastname, firstname, name, email FROM users WHERE id = :id');
-		$getUser->bindParam(':id', $id);
-		$getUser->execute();
-
-		$user = $getUser->fetch(\PDO::FETCH_ASSOC);
-		if ($user) {
-			return $user;
-		}
-
-		return false;
 	}
 
 	private function _updateToken($id)
@@ -183,7 +167,7 @@ class UsersController extends User
 		return password_verify($password, $hash);
 	}
 
-	private function _updateCheckUsername($username)
+	private function _updateCheckLogin($login)
 	{
 		$bdd = new Bdd();
 
@@ -192,8 +176,8 @@ class UsersController extends User
 		} else {
 			$id = 0;
 		}
-		$check = $bdd->getBdd()->prepare('SELECT * FROM users WHERE name = :name AND id != :id AND active = 1');
-		$check->bindParam(':name', $username, \PDO::PARAM_STR, 16);
+		$check = $bdd->getBdd()->prepare('SELECT * FROM users WHERE login = :login AND id != :id AND active = 1');
+		$check->bindParam(':login', $login);
 		$check->bindParam(':id', $id);
 		$check->execute();
 
@@ -214,7 +198,7 @@ class UsersController extends User
 			$id = 0;
 		}
 		$check = $bdd->getBdd()->prepare('SELECT email FROM users WHERE email = :email AND id != :id AND active = 1');
-		$check->bindParam(':email', $email, \PDO::PARAM_STR, 60);
+		$check->bindParam(':email', $email);
 		$check->bindParam(':id', $id);
 		$check->execute();
 
