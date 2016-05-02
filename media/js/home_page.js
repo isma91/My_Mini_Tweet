@@ -78,9 +78,16 @@ $(document).ready(function(){
 			$.post(path_to_ajax, {action: 'inscription', user_lastname: user_lastname, user_firstname: user_firstname, user_email: user_email, user_username: user_username, user_pass: user_pass, user_confirm_pass: user_confirm_pass}, function(data, textStatus) {
 				if (textStatus === "success") {
 					data = JSON.parse(data);
-					console.log(data);
+					if (data.error === null) {
+						Materialize.toast('<p class="alert-success">You successfully sign up !!<p>', 3000, 'rounded alert-success');
+						if ($("#sign_in").attr('class') === undefined || $.trim($("#sign_in").attr('class')) === "") {
+							$("#sign_in").children('div').trigger('click');
+						}
+					} else {
+						Materialize.toast('<p class="alert-failed">' + data.error + '<p>', 3000, 'rounded alert-failed');
+					}
 				} else {
-					Materialize.toast('<p class="alert-failed">Something failed in the server !! Please contact the admin of the site !!<p>', 3000, 'rounded alert-failed');
+					Materialize.toast('<p class="alert-failed">a problem occurred while sending your data in the server !! Please contact the admin of the site !!<p>', 3000, 'rounded alert-failed');
 				}
 			});
 		}
