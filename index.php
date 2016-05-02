@@ -20,7 +20,7 @@ function go_to_view ($page) {
 	include "./view/" . $page;
 }
 
-$connected = UsersController::isConnected();
+$connected = UsersController::is_connected();
 if ($connected === false) {
 	go_to_view("home_page.php");
 }
