@@ -28,7 +28,7 @@
         </div>
         <div class="row mui-panel">
             <ul class="collapsible popout" data-collapsible="accordion">
-                <li>
+                <li id="sign_up">
                     <div class="collapsible-header"><i class="material-icons">add_circle</i>Sign up</div>
                     <div class="collapsible-body">
                         <div class="row">
@@ -81,7 +81,7 @@
                         </div>
                     </div>
                 </li>
-                <li>
+                <li id="sign_in">
                   <div class="collapsible-header"><i class="material-icons">arrow_drop_down_circle</i>Sign in</div>
                   <div class="collapsible-body">
                       <div class="row">
