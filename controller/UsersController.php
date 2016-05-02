@@ -41,21 +41,25 @@ class UsersController extends User
             $error_create = $error_create . "<p>Password are not the same !!</p>";
         }
         if ($error_create === "") {
-            $pass = $this->_hash_password($pass);
+            $hashed_pass = $this->_hash_password($pass);
             if (!$this->_check_login($login)) {
-                $this->setError('Login already in use');
+                self::send_json('Login already in use', null);
+                return false;
             }
             if (!$this->_check_email($email)) {
-                $this->setError('Email already in use');
+                self::send_json('Email already in use', null);
+                return false;
             }
-            $create = $bdd->getBdd()->prepare('INSERT INTO users (login, firstname, lastname, email, pass, created_at) VALUES (:login, :firstname, :lastname, :email, :pass, NOW())');
-            $create->bindParam(':login', $login);
+            $create = $bdd->getBdd()->prepare('INSERT INTO users (lastname, firstname, email, login, pass, created_at) VALUES (:lastname, :firstname, :email, :login, :pass, NOW())');
             $create->bindParam(':lastname', $lastname);
             $create->bindParam(':firstname', $firstname);
             $create->bindParam(':email', $email);
-            $create->bindParam(':pass', $pass);
-            if ($create->execute()) {
-                $this->setError('Congrats ! You can connect');
+            $create->bindParam(':login', $login);
+            $create->bindParam(':pass', $hashed_pass);
+            if (!$create->execute()) {
+                self::send_json('A problem occurred while adding your data in the database !! Please contact the admin of the site !!', null);
+            } else {
+                self::send_json(null, null);
             }
         } else {
             self::send_json($error_create, null);
