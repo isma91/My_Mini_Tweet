@@ -1,0 +1,40 @@
+@font-face {
+	font-family: 'Pacifico';
+	font-style: normal;
+	src: url('../font/Pacifico.ttf');
+}
+@font-face {
+	font-family: 'Abel-Regular';
+	font-style: normal;
+	src: url('../font/Abel-Regular.ttf');
+}
+html,body {
+	height:100%;
+	margin: 0px;
+	padding: 0px;
+	font-family: 'Abel-Regular', sans-serif;
+}
+#title {
+	text-align: center;
+	margin: auto;
+	font-family: 'Pacifico', cursive;
+	font-size: 2em;
+}
+.alert-success {
+	width: 100%;
+	margin: auto;
+	text-align: center;
+	background-color: green;
+}
+.alert-failed {
+	width: 100%;
+	margin: auto;
+	text-align: center;
+	background-color: red;
+}
+.alert-info {
+	width: 100%;
+	margin: auto;
+	text-align: center;
+	background-color: #00CCFF;
+}
