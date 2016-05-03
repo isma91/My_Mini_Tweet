@@ -21,6 +21,7 @@ function go_to_view ($page) {
 }
 
 $connected = UsersController::is_connected();
+
 if (isset($_GET)) {
 	switch ($_GET["page"]) {
 		case 'home':
