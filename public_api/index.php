@@ -14,6 +14,9 @@ switch ($_POST["action"]) {
 	case 'get_user_info':
 	$user->get_user_info($_POST["user_id"]);
 	break;
+	case 'logout':
+	$user->logout($_POST["user_id"], $_POST["token"]);
+	break;
 	default:
 	echo json_encode(array("error" => "Not a valid action !!", "data" => null));
 	break;
