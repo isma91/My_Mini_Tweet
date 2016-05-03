@@ -161,13 +161,22 @@ class UsersController extends User
         }
     }
 
-    public function get_user_info ($id) {
+    public function user_exist($id)
+    {
         $bdd = new Bdd();
         $check = $bdd->getBdd()->prepare('SELECT id FROM users WHERE  id = :id AND active = 1');
         $check->bindParam(':id', $id);
         $check->execute();
-        $user_check = $check->fetch(\PDO::FETCH_ASSOC);
-        if ($user_check) {
+        if ($check->fetch(\PDO::FETCH_ASSOC)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function get_user_info ($id) {
+        $bdd = new Bdd();
+        if (self::user_exist($id)) {
             $get_user = $bdd->getBdd()->prepare('SELECT lastname, firstname, email, login, avatar, created_at FROM users WHERE  id = :id AND active = 1');
             $get_user->bindParam(':id', $id);
             if ($get_user->execute()) {
@@ -182,6 +191,25 @@ class UsersController extends User
                 }
             } else {
                 self::send_json("A problem occurred when we try to get your user info !! Please contact the admin of the site !!", null);
+            }
+        } else {
+            self::send_json("User not found !!", null);
+        }
+    }
+
+    public function logout($id, $token)
+    {
+        $bdd = new Bdd();
+        if (self::user_exist($id)) {
+            $get_token = $bdd->getBdd()->prepare('SELECT token FROM users WHERE  id = :id AND active = 1');
+            $get_token->bindParam(':id', $id);
+            $get_token->execute();
+            $user_token = $get_token->fetch(\PDO::FETCH_ASSOC);
+            if ($user_token["token"] === $token) {
+                session_destroy();
+                self::send_json(null, null);
+            } else {
+                self::send_json("Bad token !! Please delete your cache and your cookie of this site !!", null);
             }
         } else {
             self::send_json("User not found !!", null);
