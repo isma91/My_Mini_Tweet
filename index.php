@@ -21,6 +21,34 @@ function go_to_view ($page) {
 }
 
 $connected = UsersController::is_connected();
-if ($connected === false) {
-	go_to_view("home_page.php");
+if (isset($_GET)) {
+	switch ($_GET["page"]) {
+		case 'home':
+		if ($connected === false) {
+			go_to_view("home_page.php");
+		} else {
+			go_to_view("wall.php");
+		}
+		break;
+		case 'wall':
+		if ($connected === false) {
+			go_to_view("home_page.php");
+		} else {
+			go_to_view("wall.php");
+		}
+		break;
+		default:
+		if ($connected === false) {
+			go_to_view("home_page.php");
+		} else {
+			go_to_view("wall.php");
+		}
+		break;
+	}
+} else {
+	if ($connected === false) {
+		go_to_view("home_page.php");
+	} else {
+		go_to_view("wall.php");
+	}
 }
