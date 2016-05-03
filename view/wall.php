@@ -10,15 +10,22 @@
 <body>
 	<div class="container" id="the_body">
 		<ul id="slide-out" class="side-nav fixed">
-			<div class="row" id="div_user_avatar"></div>
-			<div class="row">
+			<input name="avatar" id="input_avatar" type="file" />
+			<div class="row mui-panel" id="div_user_avatar"></div>
+			<div class="row mui-panel">
 				<h1 class="title" id="user_lastname_firstname"></h1>
 			</div>
-			<div class="row">
+			<div class="row mui-panel">
 				<h2 class="title" id="user_login"></h2>
 			</div>
 			<div class="row mui-panel">
 				<h3 class="title" id="user_count_tweet"></h3>
+			</div>
+			<div class="row end_button mui-panel">
+				<button class="waves-effect btn-flat" id="change_info_user">Change Info User</button>
+			</div>
+			<div class="row end_button mui-panel">
+				<button class="waves-effect btn-flat" id="logout" token='<?php echo $_SESSION["token"] ?>'>Logout</button>
 			</div>
 		</ul>
 	</div>
