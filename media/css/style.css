@@ -77,7 +77,8 @@ button:focus {
 	font-weight: bold;
 	font-size: 1.3em;
 }
-#user_id {
+#user_id,
+#input_avatar {
 	visibility: hidden;
 	display: none;
 }
