@@ -77,3 +77,15 @@ button:focus {
 	font-weight: bold;
 	font-size: 1.3em;
 }
+#user_id {
+	visibility: hidden;
+	display: none;
+}
+#div_user_avatar {
+	cursor: pointer;
+	text-align: center;
+}
+#count_tweet {
+	color: #888888;
+	font-size: 1.3em;
+}
