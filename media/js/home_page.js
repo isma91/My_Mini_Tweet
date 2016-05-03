@@ -92,4 +92,40 @@ $(document).ready(function(){
 			});
 		}
 	});
+	$(document).on('click', '#connexion', function() {
+		error_connexion = "";
+		$("#div_error").html('');
+		change_to_valide('#user_login');
+		change_to_valide('#user_pass_sign_in');
+		user_username = $.trim($('#user_login').val());
+		user_pass = $('#user_pass_sign_in').val();
+		if (user_username === "") {
+			change_to_invalide("#user_login");
+			error_connexion = error_connexion + "<p>Login empty !!</p>";
+		}
+		if (user_pass === "") {
+			change_to_invalide("#user_pass_sign_in");
+			error_connexion = error_connexion + "<p>Pass empty !!</p>";
+		}
+		if (user_pass !== "" && user_pass.length < 5) {
+			change_to_invalide("#user_pass_sign_in");
+			error_connexion = error_connexion + "<p>Your pass must be at least 5 characters !!</p>";
+		}
+		$("#div_error").html(error_connexion);
+		if (error_connexion === "") {
+			$.post(path_to_ajax, {action: 'connexion', user_username: user_username, user_pass: user_pass}, function(data, textStatus) {
+				if (textStatus === "success") {
+					data = JSON.parse(data);
+					if (data.error === null) {
+						Materialize.toast('<p class="alert-success">You sign in successfully !!<p>', 3000, 'rounded alert-success');
+						window.location = "?page=wall";
+					} else {
+						Materialize.toast('<p class="alert-failed">' + data.error + '<p>', 3000, 'rounded alert-failed');
+					}
+				} else {
+					Materialize.toast('<p class="alert-failed">a problem occurred while sending your data in the server !! Please contact the admin of the site !!<p>', 3000, 'rounded alert-failed');
+				}
+			});
+		}
+	});
 });
