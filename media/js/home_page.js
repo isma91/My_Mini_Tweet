@@ -117,8 +117,10 @@ $(document).ready(function(){
 				if (textStatus === "success") {
 					data = JSON.parse(data);
 					if (data.error === null) {
-						Materialize.toast('<p class="alert-success">You sign in successfully !!<p>', 3000, 'rounded alert-success');
-						window.location = "?page=wall";
+						Materialize.toast('<p class="alert-success">You sign in successfully !!<p>', 1500, 'rounded alert-success');
+						setTimeout(function () {
+							window.location = "?page=wall";
+						}, 1000);
 					} else {
 						Materialize.toast('<p class="alert-failed">' + data.error + '<p>', 3000, 'rounded alert-failed');
 					}
