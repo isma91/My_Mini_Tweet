@@ -4,13 +4,20 @@
 $(document).ready(function(){
 	var path_to_ajax, user_lastname, user_firstname, user_email, user_username, user_pass, user_confirm_pass, error_inscription, error_connexion;
 	path_to_ajax = "public_api/index.php";
+	function press_enter (selector, go_function) {
+		$(document).on('keyup', selector, function(event) {
+			if (event.keyCode === 13) {
+				go_function();
+			}
+		});
+	}
 	function change_to_invalide (selector) {
 		$(selector).css('border-bottom', '1px solid #FF0000');
 	}
 	function change_to_valide (selector) {
 		$(selector).css('border-bottom', '1px solid #9e9e9e');
 	}
-	$(document).on('click', '#inscription', function() {
+	function inscription () {
 		error_inscription = "";
 		$("#div_error").html("");
 		change_to_valide("#user_lastname");
@@ -56,7 +63,7 @@ $(document).ready(function(){
 		if (user_email !== "") {
 			if (user_email.split('@').length === 2) {
 				if (user_email.split('@')[0] !== "" && user_email.split('@')[1] !== "") {
-					if (user_email.split('@')[1].split(".").length > 0) {
+					if (user_email.split('@')[1].split(".").length > 1) {
 					} else {
 						error_inscription = error_inscription + "<p>Invalid email !!</p>";
 						change_to_invalide("#user_email");
@@ -91,8 +98,16 @@ $(document).ready(function(){
 				}
 			});
 		}
+	}
+	$(document).on('click', '#inscription', function() {
+		inscription();
 	});
-	$(document).on('click', '#connexion', function() {
+	press_enter("#user_lastname", inscription);
+	press_enter("#user_firstname", inscription);
+	press_enter("#user_email", inscription);
+	press_enter("#user_pass", inscription);
+	press_enter("#user_confirm_pass", inscription);
+	function connexion () {
 		error_connexion = "";
 		$("#div_error").html('');
 		change_to_valide('#user_login');
@@ -129,5 +144,10 @@ $(document).ready(function(){
 				}
 			});
 		}
+	}
+	$(document).on('click', '#connexion', function() {
+		connexion();
 	});
+	press_enter("#user_login", connexion);
+	press_enter("#user_pass_sign_in", connexion);
 });
