@@ -53,7 +53,10 @@ if (count($_FILES) !== 0) {
 		$user->remove_account($_POST["user_pass_remove_account"]);
 		break;
 		case 'send_tweet':
-		$user->send_tweet($_POST["user_id"], $_POST["token"], $_POST["tweet"], $_POST["media"]);
+		$user->send_tweet($_POST["tweet"]);
+		break;
+		case 'get_user_tweet':
+		$user->get_user_tweet($_POST["id"]);
 		break;
 		default:
 		echo json_encode(array("error" => "Not a valid action !!", "data" => null));
