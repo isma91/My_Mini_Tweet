@@ -3,32 +3,85 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="description" content="My_Mini_Tweet is a good way to test your own ego !!" />
-	<title>Welcome </title>
+	<title>Welcome to My_Mini_Tweet</title>
 	<?php include "media.html" ?>
 	<script src="media/js/wall.js"></script>
 </head>
 <body>
 	<div class="container" id="the_body">
 		<ul id="slide-out" class="side-nav fixed">
-			<input name="avatar" id="input_avatar" type="file" />
+			<form id="form_avatar" enctype="multipart/form-data" method="POST">
+				<div class="file-field input-field">
+					<div class="btn">
+						<span>File</span>
+						<input type="file" name="input_avatar" id="input_avatar" accept="image/*">
+					</div>
+					<div class="file-path-wrapper">
+						<input class="file-path validate" type="text">
+					</div>
+				</div>
+				<div class="row end_button mui-panel">
+					<button class="waves-effect btn-flat" id="send_avatar">Upload avatar</button>
+				</div>
+			</form>
 			<div class="row mui-panel" id="div_user_avatar"></div>
 			<div class="row mui-panel">
 				<h1 class="title" id="user_lastname_firstname"></h1>
+				<h2 id="user_login_wall"></h2>
+				<h3 id="user_email_wall"></h3>
 			</div>
 			<div class="row mui-panel">
-				<h2 class="title" id="user_login"></h2>
-			</div>
-			<div class="row mui-panel">
-				<h3 class="title" id="user_count_tweet"></h3>
+				<h4 id="user_count_tweet"></h4>
+				<h5 id="user_created_at"></h5>
 			</div>
 			<div class="row end_button mui-panel">
-				<button class="waves-effect btn-flat" id="change_info_user">Change Info User</button>
+				<button class="waves-effect btn-flat" id="change_pass">Change your password</button>
+			</div>
+			<div class="row end_button mui-panel">
+				<button class="waves-effect btn-flat" id="display_hide_form_tweet">Form tweet<i class="material-icons right" id="display_hide_form_tweet_icon">visibility</i></button>
 			</div>
 			<div class="row end_button mui-panel">
 				<button class="waves-effect btn-flat" id="logout" token='<?php echo $_SESSION["token"] ?>'>Logout</button>
 			</div>
+			<div class="row end_button mui-panel danger-zone">
+				<button class="waves-effect btn-flat" id="remove_user">Remove This Account</button>
+			</div>
 		</ul>
-	</div>
-	<span id="user_id"><?php echo $_SESSION["id"]; ?></span>
-</body>
-</html>
+		<div id="user_tweet" class="container">
+			<div class="row center-align">
+				<div class="col s12">
+					<div class="card">
+						<div class="card-content">
+						<span class="card-title">Aydogmus Ismail</span><br/>
+						<span class="card-title">@isma91</span>
+							<p>conent of the tweet !!! If we click in the link of hashtag, we gonna search all the hashtage of our tweet</p>
+							</div>
+							<div class="card-action">
+								<a href="#">#love</a>
+								<a href="#">#yahoo</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div id="form_tweet" class="container">
+				<div class="container">
+					<div class="container input-field col s12">
+						<i class="material-icons prefix">message</i>
+						<textarea id="tweet_form" class="materialize-textarea" length="120"></textarea>
+						<label for="tweet_form">Tweet</label>
+					</div>
+					<div class="row end_button">
+						<button class="waves-effect btn-flat" id="send_tweet">Send the tweet<i class="material-icons right">send</i></button>
+					</div>
+				</div>
+			</div>
+			<div id="modal_info_user"></div>
+			<div id="modal_user_lastname_firstname"></div>
+			<div id="modal_user_login"></div>
+			<div id="modal_user_email"></div>
+			<div id="modal_user_pass"></div>
+			<div id="modal_user_remove"></div>
+			<span id="user_id"><?php echo $_SESSION["id"]; ?></span>
+		</body>
+		</html>
