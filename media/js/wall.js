@@ -17,7 +17,6 @@ $(document).ready(function(){
 			if (textStatus === "success") {
 				data = JSON.parse(data);
 				if (data.error === null) {
-					console.log(data.data);
 					if (data.data.avatar === null) {
 						$('#div_user_avatar').html("<i class='material-icons large'>add_a_photo</i>");
 					} else {
@@ -46,6 +45,20 @@ $(document).ready(function(){
 			} else {
 				Materialize.toast('<p class="alert-failed">a problem occurred while getting your data in the server !! Please contact the admin of the site !!<p>', 3000, 'rounded alert-failed');
 			}
+		});
+	}
+	function get_user_tweet () {
+		$.post(path_to_ajax, {action: 'get_user_tweet', id: $("#user_id").text()}, function(data, textStatus) {
+			if (textStatus === "success") {
+					data = JSON.parse(data);
+					console.log(data);
+					if (data.error === null) {
+					} else {
+						Materialize.toast('<p class="alert-failed">' + data.error + '<p>', 3000, 'rounded alert-failed');
+					}
+				} else {
+					Materialize.toast('<p class="alert-failed">a problem occurred while we try to get all of your tweets in the server !! Please contact the admin of the site !!<p>', 3000, 'rounded alert-failed');
+				}
 		});
 	}
 	function update_lastname_firstname () {
@@ -157,11 +170,12 @@ $(document).ready(function(){
 	}
 	function send_tweet () {
 		if ($("#tweet_form").val().length <= 120) {
-			$.post(path_to_ajax, {action: 'send_tweet', user_id: $('#user_id').text(), token: $(this).attr('token'), tweet: $("#tweet_form").val()}, function(data, textStatus) {
+			$.post(path_to_ajax, {action: 'send_tweet', tweet: $("#tweet_form").val()}, function(data, textStatus) {
 				if (textStatus === "success") {
 					data = JSON.parse(data);
 					console.log(data);
 					if (data.error === null) {
+						Materialize.toast('<p class="alert-success">Tweet added successfully !!<p>', 3000, 'rounded alert-success');
 						get_user_info();
 					} else {
 						Materialize.toast('<p class="alert-failed">' + data.error + '<p>', 3000, 'rounded alert-failed');
@@ -173,6 +187,7 @@ $(document).ready(function(){
 		}
 	}
 	get_user_info();
+	get_user_tweet();
 	$(document).on('click', '#display_hide_form_tweet', function() {
 		form_tweet_count_button = form_tweet_count_button + 1;
 		if (form_tweet_count_button % 2 === 0) {
