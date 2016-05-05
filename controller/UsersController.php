@@ -185,7 +185,7 @@ class UsersController extends User
             $get_user->bindParam(':id', $id);
             if ($get_user->execute()) {
                 $user_info = $get_user->fetch(\PDO::FETCH_ASSOC);
-                $get_user_count_tweet = $bdd->getBdd()->prepare("SELECT COUNT(id) AS 'tweet_user' FROM tweet WHERE id = :id");
+                $get_user_count_tweet = $bdd->getBdd()->prepare("SELECT COUNT(id) AS 'tweet_user' FROM tweets WHERE user_id = :id");
                 $get_user_count_tweet->bindParam(':id', $id);
                 if ($get_user_count_tweet->execute()) {
                     $user_info["tweet_user"] = $get_user_count_tweet->fetch(\PDO::FETCH_ASSOC);
@@ -408,23 +408,28 @@ class UsersController extends User
         }
     }
 
-    public function send_tweet($id, $token, $tweet, $media)
+    public function send_tweet($tweet)
     {
-        self::send_json(null, array($id, $token, $tweet, $media));
-        die;
         if (empty($tweet)) {
             self::send_json("Empty tweet !!", null);
         } elseif (strlen($tweet) > 120) {
             self::send_json("Tweet don't be more than 120 characters !!", null);
         } else {
             $bdd = new Bdd();
-            if (self::user_exist($id)) {
+            if (self::user_exist($_SESSION["id"])) {
                 $get_token = $bdd->getBdd()->prepare('SELECT token FROM users WHERE  id = :id AND active = 1');
-                $get_token->bindParam(':id', $id);
+                $get_token->bindParam(':id', $_SESSION["id"]);
                 $get_token->execute();
                 $user_token = $get_token->fetch(\PDO::FETCH_ASSOC);
-                if ($user_token["token"] === $token) {
-                    $insert_tweet = $bdd->getBdd()->prepare('INSERT INTO tweets (user_id, content, media, created_at) VALUES (:user_id, :content, :media, NOW())');
+                if ($user_token["token"] === $_SESSION["token"]) {
+                    $insert_tweet = $bdd->getBdd()->prepare('INSERT INTO tweets (user_id, content, created_at) VALUES (:user_id, :content, NOW())');
+                    $insert_tweet->bindParam(":user_id", $_SESSION["id"]);
+                    $insert_tweet->bindParam(":content", $tweet);
+                    if ($insert_tweet->execute()) {
+                        self::send_json(null, null);
+                    } else {
+                        self::send_json("A problem occurred when we try to add the tweet in the database !! Please contact the admin of the site !!", null);
+                    }
                 } else {
                     self::send_json("Bad token !! Please delete your cache and your cookie of this site !!", null);
                 }
@@ -490,6 +495,30 @@ class UsersController extends User
             }
         } else {
             self::send_json("A problem occurred when we try to get your avatar file !! Please contact the admin of the site !!", null);
+        }
+    }
+
+    public function get_user_tweet($id)
+    {
+        $bdd = new Bdd();
+        if (self::user_exist($id)) {
+            $get_token = $bdd->getBdd()->prepare('SELECT token FROM users WHERE  id = :id AND active = 1');
+            $get_token->bindParam(':id', $id);
+            $get_token->execute();
+            $user_token = $get_token->fetch(\PDO::FETCH_ASSOC);
+            if ($user_token["token"] === $_SESSION["token"]) {
+                $get_tweet = $bdd->getBdd()->prepare("SELECT * FROM tweets WHERE user_id = :user_id");
+                $get_tweet->bindParam(":user_id", $id);
+                if ($get_tweet->execute()) {
+                    self::send_json(null, $get_tweet->fetchAll(\PDO::FETCH_ASSOC));
+                } else {
+                    self::send_json("A problem occurred when we try to get all of your tweets in the database !! Please contact the admin of the site !!", null);
+                }
+            } else {
+                self::send_json("Bad token !! Please delete your cache and your cookie of this site !!", null);
+            }
+        } else {
+            self::send_json("User not found !!", null);
         }
     }
 }
