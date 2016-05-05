@@ -54,8 +54,13 @@ html,body {
 .input-field input[type=password]:focus + label,
 .input-field input[type=email]:focus + label,
 .materialize-textarea:focus + label,
+textarea.materialize-textarea:focus:not([readonly]) + label,
 .input-field .prefix.active {
 	color: #000000;
+}
+textarea.materialize-textarea:focus:not([readonly]) {
+	border-bottom: 1px solid #000000;
+	box-shadow: 0 1px 0 0 #000000;
 }
 .input-field input[type=text]:focus,
 .input-field input[type=email]:focus,
@@ -71,22 +76,62 @@ button:focus {
 	background-color: #000000;
 	color: #FFFFFF;
 }
-#div_error {
+#div_error,
+#div_error_lastname_firstname,
+#div_error_login,
+#div_error_email,
+#div_error_actual_pass,
+#div_error_new_pass,
+#div_error_remove_user,
+#div_error_confirm_new_pass {
 	text-align: center;
 	color: #FF0000;
 	font-weight: bold;
 	font-size: 1.3em;
 }
 #user_id,
-#input_avatar {
+#form_avatar {
 	visibility: hidden;
 	display: none;
 }
-#div_user_avatar {
+#div_user_avatar,
+#change_lastname_firstname,
+#change_login,
+#change_email {
 	cursor: pointer;
 	text-align: center;
 }
 #count_tweet {
 	color: #888888;
 	font-size: 1.3em;
+}
+#user_tweet div {
+}
+#form_tweet {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+#display_hide_form_tweet:focus {
+	background-color: #FFFFFF;
+	color: #000000;
+}
+#user_login_wall {
+	text-align: center;
+	font-size: 1.9em;
+}
+#user_email_wall {
+	text-align: center;
+	font-size: 1.7em;
+}
+#user_count_tweet {
+	text-align: center;
+	font-size: 1.5em;
+}
+#user_created_at {
+	text-align: center;
+	font-size: 1.3em;
+}
+.danger-zone {
+	background-color: #FF0000;
 }
