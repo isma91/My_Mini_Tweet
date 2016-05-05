@@ -90,7 +90,8 @@ button:focus {
 	font-size: 1.3em;
 }
 #user_id,
-#form_avatar {
+#form_avatar,
+#form_media_tweet {
 	visibility: hidden;
 	display: none;
 }
@@ -134,4 +135,10 @@ button:focus {
 }
 .danger-zone {
 	background-color: #FF0000;
+}
+.card .card-action a{
+	color: #000000;
+}
+.card .card-action a:hover {
+	color: #D3D3D3;
 }
