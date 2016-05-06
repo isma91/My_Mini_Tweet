@@ -421,6 +421,7 @@ $(document).ready(function(){
 		    	if (data.error === null) {
 		    		Materialize.toast('<p class="alert-success">Avatar changed successfully !!<p>', 3000, 'rounded alert-success');
 		    		get_user_info();
+		    		get_user_tweet();
 		    	} else {
 		    		Materialize.toast('<p class="alert-failed">' + data.error + '<p>', 3000, 'rounded alert-failed');
 		    	}
