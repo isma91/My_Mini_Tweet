@@ -69,6 +69,9 @@
 		<div id="modal_user_email"></div>
 		<div id="modal_user_pass"></div>
 		<div id="modal_user_remove"></div>
+		<div id="modal_tweet_remove"></div>
 		<span id="user_id"><?php echo $_SESSION["id"]; ?></span>
+		<span id="tweet_id_to_remove"></span>
+		<span id="tweet_id_to_change"></span>
 	</body>
 	</html>
