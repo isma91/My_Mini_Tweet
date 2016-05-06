@@ -25,6 +25,9 @@
 				</div>
 			</form>
 			<div class="row mui-panel" id="div_user_avatar"></div>
+			<div class="row end_button mui-panel danger-zone">				
+				<button class="waves-effect btn-flat" id="delete_avatar">Delete avatar</button>
+			</div>
 			<div class="row mui-panel">
 				<h1 class="title" id="user_lastname_firstname"></h1>
 				<h2 id="user_login_wall"></h2>
@@ -70,6 +73,23 @@
 		<div id="modal_user_pass"></div>
 		<div id="modal_user_remove"></div>
 		<div id="modal_tweet_remove"></div>
+		<div id="modal_remove_avatar" class="modal bottom-fixed-footer">
+			<div class="modal-content">
+				<h1 class="title">To remove your avatar, write your password !!</h1>
+				<div class="row">
+					<div class="input-field col s12">
+						<i class="material-icons prefix">vpn_key</i>
+						<input id="avatar_confirm_remove" type="password">
+						<label for="avatar_confirm_remove">Password</label>
+					</div>
+				</div>
+				<div class="row" id="div_error_remove_avatar"></div>
+			</div>
+			<div class="modal-footer end_button">
+				<button class="modal-action modal-close waves-effect btn-flat left" id="cancel_info_user">Cancel</button>
+				<button class="waves-effect btn-flat right" id="apply_remove_avatar">Apply Changing</button>
+			</div>
+		</div>
 		<div id="modal_change_tweet" class="modal bottom-fixed-footer">
 			<div class="modal-content">
 				<h1 class="title">Change this tweet !!</h1>
