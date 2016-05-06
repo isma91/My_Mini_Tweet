@@ -100,7 +100,8 @@ button:focus {
 #div_user_avatar,
 #change_lastname_firstname,
 #change_login,
-#change_email {
+#change_email,
+.change_tweet_content {
 	cursor: pointer;
 	text-align: center;
 }
