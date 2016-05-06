@@ -498,27 +498,33 @@ class UsersController extends User
         }
     }
 
-    public function get_user_tweet($id)
+    public function get_user_tweet($id, $page)
     {
         $bdd = new Bdd();
-        if (self::user_exist($id)) {
-            $get_token = $bdd->getBdd()->prepare('SELECT token FROM users WHERE  id = :id AND active = 1');
-            $get_token->bindParam(':id', $id);
-            $get_token->execute();
-            $user_token = $get_token->fetch(\PDO::FETCH_ASSOC);
-            if ($user_token["token"] === $_SESSION["token"]) {
-                $get_tweet = $bdd->getBdd()->prepare("SELECT * FROM tweets WHERE user_id = :user_id");
-                $get_tweet->bindParam(":user_id", $id);
-                if ($get_tweet->execute()) {
-                    self::send_json(null, $get_tweet->fetchAll(\PDO::FETCH_ASSOC));
+        if (!is_int($age)) {
+            self::send_json("The page must be an integer !!");
+        } else {
+            if (self::user_exist($id)) {
+                $get_token = $bdd->getBdd()->prepare('SELECT token FROM users WHERE  id = :id AND active = 1');
+                $get_token->bindParam(':id', $id);
+                $get_token->execute();
+                $user_token = $get_token->fetch(\PDO::FETCH_ASSOC);
+                if ($user_token["token"] === $_SESSION["token"]) {
+                    $get_tweet = $bdd->getBdd()->prepare("SELECT * FROM (SELECT * FROM tweets WHERE user_id = 1 ORDER BY id ASC LIMIT :first_limit, :second_limit) AS sub_sql ORDER BY id DESC");
+                    $get_tweet->bindParam(":user_id", $id);
+                    $get_tweet->bindParam(":first_limit", ($page * 3));
+                    $get_tweet->bindParam(":second_limit", 3);
+                    if ($get_tweet->execute()) {
+                        self::send_json(null, $get_tweet->fetchAll(\PDO::FETCH_ASSOC));
+                    } else {
+                        self::send_json("A problem occurred when we try to get all of your tweets in the database !! Please contact the admin of the site !!", null);
+                    }
                 } else {
-                    self::send_json("A problem occurred when we try to get all of your tweets in the database !! Please contact the admin of the site !!", null);
+                    self::send_json("Bad token !! Please delete your cache and your cookie of this site !!", null);
                 }
             } else {
-                self::send_json("Bad token !! Please delete your cache and your cookie of this site !!", null);
+                self::send_json("User not found !!", null);
             }
-        } else {
-            self::send_json("User not found !!", null);
         }
     }
 }
