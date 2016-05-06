@@ -185,7 +185,7 @@ class UsersController extends User
             $get_user->bindParam(':id', $id);
             if ($get_user->execute()) {
                 $user_info = $get_user->fetch(\PDO::FETCH_ASSOC);
-                $get_user_count_tweet = $bdd->getBdd()->prepare("SELECT COUNT(id) AS 'tweet_user' FROM tweets WHERE user_id = :id");
+                $get_user_count_tweet = $bdd->getBdd()->prepare("SELECT COUNT(id) AS 'tweet_user' FROM tweets WHERE user_id = :id AND active = 1");
                 $get_user_count_tweet->bindParam(':id', $id);
                 if ($get_user_count_tweet->execute()) {
                     $user_info["tweet_user"] = $get_user_count_tweet->fetch(\PDO::FETCH_ASSOC);
@@ -501,7 +501,7 @@ class UsersController extends User
     public function get_user_tweet($id, $page)
     {
         $bdd = new Bdd();
-        if (!is_int($age)) {
+        if (!is_numeric($page)) {
             self::send_json("The page must be an integer !!");
         } else {
             if (self::user_exist($id)) {
@@ -510,10 +510,8 @@ class UsersController extends User
                 $get_token->execute();
                 $user_token = $get_token->fetch(\PDO::FETCH_ASSOC);
                 if ($user_token["token"] === $_SESSION["token"]) {
-                    $get_tweet = $bdd->getBdd()->prepare("SELECT * FROM (SELECT * FROM tweets WHERE user_id = 1 ORDER BY id ASC LIMIT :first_limit, :second_limit) AS sub_sql ORDER BY id DESC");
+                    $get_tweet = $bdd->getBdd()->prepare("SELECT * FROM (SELECT * FROM tweets WHERE user_id = 1 AND active = 1 ORDER BY id ASC LIMIT " . ($page * 3) . ", 3) AS sub_sql ORDER BY id DESC");
                     $get_tweet->bindParam(":user_id", $id);
-                    $get_tweet->bindParam(":first_limit", ($page * 3));
-                    $get_tweet->bindParam(":second_limit", 3);
                     if ($get_tweet->execute()) {
                         self::send_json(null, $get_tweet->fetchAll(\PDO::FETCH_ASSOC));
                     } else {
