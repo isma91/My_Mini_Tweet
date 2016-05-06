@@ -67,6 +67,12 @@ if (count($_FILES) !== 0) {
 		case 'change_tweet':
 		$user->change_tweet($_POST["tweet_to_change"], $_POST["tweet_id_to_change"]);
 		break;
+		case 'remove_avatar':
+		$user->remove_avatar($_POST["password_remove_avatar"]);
+		break;
+		case 'fav_unfav_love_unlove_tweet':
+		$user->fav_unfav_love_unlove_tweet($_POST["id_tweet_to_fav_unfav_love_unlove"], $_POST["fav_or_love"]);
+		break;
 		default:
 		echo json_encode(array("error" => "Not a valid action !!", "data" => null));
 		break;
