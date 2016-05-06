@@ -83,7 +83,8 @@ button:focus {
 #div_error_actual_pass,
 #div_error_new_pass,
 #div_error_remove_user,
-#div_error_confirm_new_pass {
+#div_error_confirm_new_pass,
+#div_error_remove_tweet {
 	text-align: center;
 	color: #FF0000;
 	font-weight: bold;
@@ -91,7 +92,8 @@ button:focus {
 }
 #user_id,
 #form_avatar,
-#form_media_tweet {
+#form_media_tweet,
+#tweet_id_to_remove {
 	visibility: hidden;
 	display: none;
 }
@@ -152,4 +154,8 @@ button:focus {
 }
 .pagination li.active {
 	background-color: #000000;
+}
+.remove_tweet {
+	background-color: #FF0000;
+	cursor: pointer;
 }
