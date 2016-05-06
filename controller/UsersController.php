@@ -510,7 +510,7 @@ class UsersController extends User
                 $get_token->execute();
                 $user_token = $get_token->fetch(\PDO::FETCH_ASSOC);
                 if ($user_token["token"] === $_SESSION["token"]) {
-                    $get_tweet = $bdd->getBdd()->prepare("SELECT * FROM (SELECT * FROM tweets WHERE user_id = 1 AND active = 1 ORDER BY id ASC LIMIT " . ($page * 3) . ", 3) AS sub_sql ORDER BY id DESC");
+                    $get_tweet = $bdd->getBdd()->prepare("SELECT * FROM (SELECT tweets.id, tweets.favorite, tweets.love, tweets.content, tweets.created_at, users.lastname, users.firstname, users.login FROM tweets INNER JOIN users ON tweets.user_id = users.id WHERE tweets.user_id = :user_id AND tweets.active = 1 ORDER BY tweets.id ASC LIMIT " . ($page * 3) . ", 3) AS sub_sql ORDER BY id DESC");
                     $get_tweet->bindParam(":user_id", $id);
                     if ($get_tweet->execute()) {
                         self::send_json(null, $get_tweet->fetchAll(\PDO::FETCH_ASSOC));
