@@ -56,7 +56,7 @@ if (count($_FILES) !== 0) {
 		$user->send_tweet($_POST["tweet"]);
 		break;
 		case 'get_user_tweet':
-		$user->get_user_tweet($_POST["id"]);
+		$user->get_user_tweet($_POST["id"], $_POST["page"]);
 		break;
 		default:
 		echo json_encode(array("error" => "Not a valid action !!", "data" => null));
