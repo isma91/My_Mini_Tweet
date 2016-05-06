@@ -48,40 +48,27 @@
 			</div>
 		</ul>
 		<div id="user_tweet" class="container">
-			<div class="row center-align">
-				<div class="col s12">
-					<div class="card">
-						<div class="card-content">
-						<span class="card-title">Aydogmus Ismail</span><br/>
-						<span class="card-title">@isma91</span>
-							<p>conent of the tweet !!! If we click in the link of hashtag, we gonna search all the hashtage of our tweet</p>
-							</div>
-							<div class="card-action">
-								<a href="#">#love</a>
-								<a href="#">#yahoo</a>
-							</div>
-						</div>
-					</div>
+		</div>
+		<div id="tweet_pagination" class="container">
+		</div>
+		<div id="form_tweet" class="container">
+			<div class="container">
+				<div class="container input-field col s12">
+					<i class="material-icons prefix">message</i>
+					<textarea id="tweet_form" class="materialize-textarea" length="120"></textarea>
+					<label for="tweet_form">Tweet</label>
+				</div>
+				<div class="row end_button">
+					<button class="waves-effect btn-flat" id="send_tweet">Send the tweet<i class="material-icons right">send</i></button>
 				</div>
 			</div>
-			<div id="form_tweet" class="container">
-				<div class="container">
-					<div class="container input-field col s12">
-						<i class="material-icons prefix">message</i>
-						<textarea id="tweet_form" class="materialize-textarea" length="120"></textarea>
-						<label for="tweet_form">Tweet</label>
-					</div>
-					<div class="row end_button">
-						<button class="waves-effect btn-flat" id="send_tweet">Send the tweet<i class="material-icons right">send</i></button>
-					</div>
-				</div>
-			</div>
-			<div id="modal_info_user"></div>
-			<div id="modal_user_lastname_firstname"></div>
-			<div id="modal_user_login"></div>
-			<div id="modal_user_email"></div>
-			<div id="modal_user_pass"></div>
-			<div id="modal_user_remove"></div>
-			<span id="user_id"><?php echo $_SESSION["id"]; ?></span>
-		</body>
-		</html>
+		</div>
+		<div id="modal_info_user"></div>
+		<div id="modal_user_lastname_firstname"></div>
+		<div id="modal_user_login"></div>
+		<div id="modal_user_email"></div>
+		<div id="modal_user_pass"></div>
+		<div id="modal_user_remove"></div>
+		<span id="user_id"><?php echo $_SESSION["id"]; ?></span>
+	</body>
+	</html>
