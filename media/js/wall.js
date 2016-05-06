@@ -65,7 +65,7 @@ $(document).ready(function(){
 					if (data.error === null) {
 						div_user_tweet = "";
 						$.each(data.data, function(index, tweet_object) {
-							div_user_tweet = div_user_tweet + '<div class="row center-align"><div class="col s12"><div class="card"><i class="material-icons right remove_tweet" id="remove_tweet_' + tweet_object.id + '">close</i><div class="card-content"><span class="card-title">' + tweet_object.lastname + ' ' + tweet_object.firstname + '</span><br/><span class="card-title">@' + tweet_object.login + '</span><p>' + tweet_object.content + '</p></div><div class="card-action">';
+							div_user_tweet = div_user_tweet + '<div class="row center-align"><div class="col s12"><div class="card"><i class="material-icons right remove_tweet" id="remove_tweet_' + tweet_object.id + '">close</i><div class="card-content"><span class="card-title">' + tweet_object.lastname + ' ' + tweet_object.firstname + '</span><br/><span class="card-title">@' + tweet_object.login + '</span><p><span id="only_tweet_content_' + tweet_object.id + '">' + tweet_object.content + '</span><i class="material-icons change_tweet_content" id="change_tweet_content_' + tweet_object.id + '">mode_edit</i></p></div><div class="card-action">';
 							if (tweet_object.favorite == 0) {
 								div_user_tweet = div_user_tweet + '<button class="waves-effect btn-flat"><i class="material-icons not_favorite" id="favorite_' + tweet_object.id + '">star_border</i></button>';
 							} else {
@@ -234,6 +234,50 @@ $(document).ready(function(){
 	}
 	get_user_info();
 	get_user_tweet();
+	$(document).on('click', '.change_tweet_content', function() {
+		if (Number.isInteger(parseInt($(this).attr('id').substring(21)))) {
+			$('#tweet_id_to_change').html(parseInt($(this).attr('id').substring(21)));
+			$.post(path_to_ajax, {action: 'get_tweet_by_id', id_tweet: parseInt($(this).attr('id').substring(21))}, function(data, textStatus) {
+				if (textStatus === "success") {
+					data = JSON.parse(data);
+					if (data.error === null) {
+						$('#tweet_change').val(data.data.content);
+						$('#modal_change_tweet').openModal();
+					} else {
+						Materialize.toast('<p class="alert-failed">' + data.error + '<p>', 3000, 'rounded alert-failed');
+					}
+				} else {
+					Materialize.toast('<p class="alert-failed">a problem occurred while we send the id tweet in the server !! Please contact the admin of the site !!<p>', 3000, 'rounded alert-failed');
+				}
+			});
+		}
+	});
+	$(document).on('keyup', '#tweet_change', function() {
+		if ($(this).val().length > 120) {
+			$(this).css('border-bottom', '2px solid #FF0000');
+		} else {
+			$(this).css('border-bottom', '2px solid #000000');
+		}
+	});
+	$(document).on('click', '#apply_change_tweet', function() {
+		if ($('#tweet_change').val().length < 120) {
+			$.post(path_to_ajax, {action: 'change_tweet', tweet_to_change: $('#tweet_change').val(), tweet_id_to_change: $('#tweet_id_to_change').text()}, function(data, textStatus) {
+				if (textStatus === "success") {
+					data = JSON.parse(data);
+					if (data.error === null) {
+						Materialize.toast('<p class="alert-success">Tweet changed successfully !!<p>', 3000, 'rounded alert-success');
+						$("#modal_change_tweet").closeModal();
+						get_user_info();
+						get_user_tweet();
+					} else {
+						Materialize.toast('<p class="alert-failed">' + data.error + '<p>', 3000, 'rounded alert-failed');
+					}
+				} else {
+					Materialize.toast('<p class="alert-failed">a problem occurred while we send the id tweet in the server !! Please contact the admin of the site !!<p>', 3000, 'rounded alert-failed');
+				}
+			});
+		}
+	});
 	$(document).on('click', '.remove_tweet', function() {
 		if (Number.isInteger(parseInt($(this).attr('id').substring(13)))) {
 			$('#tweet_id_to_remove').html(parseInt($(this).attr('id').substring(13)));
