@@ -61,6 +61,12 @@ if (count($_FILES) !== 0) {
 		case 'remove_tweet':
 		$user->remove_tweet($_POST["id_tweet"], $_POST["user_pass_remove_tweet"]);
 		break;
+		case 'get_tweet_by_id':
+		$user->get_tweet_by_id($_POST["id_tweet"]);
+		break;
+		case 'change_tweet':
+		$user->change_tweet($_POST["tweet_to_change"], $_POST["tweet_id_to_change"]);
+		break;
 		default:
 		echo json_encode(array("error" => "Not a valid action !!", "data" => null));
 		break;
