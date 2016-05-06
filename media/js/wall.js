@@ -2,7 +2,7 @@
 /*jslint devel : true*/
 /*global $, document, this*/
 $(document).ready(function(){
-	var path_to_ajax, form_tweet_count_button, error_change_lastname_firstname, error_change_login, error_change_email, error_actual_pass, error_new_pass, error_confirm_new_pass, form_data_avatar, div_user_tweet, i, div_tweet_pagination, error_remove_tweet;
+	var path_to_ajax, form_tweet_count_button, error_change_lastname_firstname, error_change_login, error_change_email, error_actual_pass, error_new_pass, error_confirm_new_pass, form_data_avatar, div_user_tweet, i, div_tweet_pagination, error_remove_tweet, user_tweet_avatar, error_remove_avatar;
 	form_tweet_count_button = 0;
 	path_to_ajax = "public_api/index.php";
 	function press_enter (selector, go_function) {
@@ -35,7 +35,7 @@ $(document).ready(function(){
 					}
 					$('#user_email_wall').html('<span id="only_user_email">' + data.data.email + '</span>' + ' <i class="material-icons" id="change_email">mode_edit</i>');
 					$("#modal_user_email").html('<div id="modal_change_email" class="modal bottom-fixed-footer"><div class="modal-content"><h1 class="title">Change your email here !!</h1><div class="row"><div class="input-field col s12"><i class="material-icons prefix">email</i><input value="' + data.data.email + '" id="user_email_change" type="email" placeholder="Email"></div></div><div class="row" id="div_error_email"></div></div><div class="modal-footer end_button"><button class="modal-action modal-close waves-effect btn-flat left" id="cancel_info_user">Cancel</button><button class="waves-effect btn-flat right" id="apply_changing_email">Apply Changing</button></div></div>');
-					//$('#user_created_at').html(""data.data.created_at);
+					$('#user_created_at').html("Account created at " + data.data.created_at);
 					$('#user_created_at').html();
 					$("#modal_user_pass").html('<div id="modal_change_pass" class="modal bottom-fixed-footer"><div class="modal-content"><h1 class="title">Change your password here !!</h1><div class="row"><div class="input-field col s12"><i class="material-icons prefix">vpn_key</i><input id="user_actual_pass" type="password"><label for="user_actual_pass">Actual Password</label></div></div><div class="row"><div class="input-field col s12"><i class="material-icons prefix">vpn_key</i><input id="user_new_pass" type="password"><label for="user_new_pass">New Password</label></div></div><div class="row"><div class="input-field col s12"><i class="material-icons prefix">vpn_key</i><input id="user_confirm_new_pass" type="password"><label for="user_confirm_new_pass">Confirm New Password</label></div></div><div class="row" id="div_error_actual_pass"></div><div class="row" id="div_error_new_pass"></div><div class="row" id="div_error_confirm_new_pass"></div></div><div class="modal-footer end_button"><button class="modal-action modal-close waves-effect btn-flat left" id="cancel_info_user">Cancel</button><button class="waves-effect btn-flat right" id="apply_changing_pass">Apply Changing</button></div></div>');
 					$("#modal_user_remove").html('<div id="modal_remove_user" class="modal bottom-fixed-footer"><div class="modal-content"><h1 class="title">To remove your account, write your password !!</h1><div class="row"><div class="input-field col s12"><i class="material-icons prefix">vpn_key</i><input id="user_confirm_remove" type="password"><label for="user_confirm_remove">Password</label></div></div><div class="row" id="div_error_remove_user"></div></div><div class="modal-footer end_button"><button class="modal-action modal-close waves-effect btn-flat left" id="cancel_info_user">Cancel</button><button class="waves-effect btn-flat right" id="apply_remove_user">Apply Changing</button></div></div>');
@@ -64,20 +64,29 @@ $(document).ready(function(){
 					data = JSON.parse(data);
 					if (data.error === null) {
 						div_user_tweet = "";
-						$.each(data.data, function(index, tweet_object) {
-							div_user_tweet = div_user_tweet + '<div class="row center-align"><div class="col s12"><div class="card"><i class="material-icons right remove_tweet" id="remove_tweet_' + tweet_object.id + '">close</i><div class="card-content"><span class="card-title">' + tweet_object.lastname + ' ' + tweet_object.firstname + '</span><br/><span class="card-title">@' + tweet_object.login + '</span><p><span id="only_tweet_content_' + tweet_object.id + '">' + tweet_object.content + '</span><i class="material-icons change_tweet_content" id="change_tweet_content_' + tweet_object.id + '">mode_edit</i></p></div><div class="card-action">';
-							if (tweet_object.favorite == 0) {
-								div_user_tweet = div_user_tweet + '<button class="waves-effect btn-flat"><i class="material-icons not_favorite" id="favorite_' + tweet_object.id + '">star_border</i></button>';
-							} else {
-								div_user_tweet = div_user_tweet + '<button class="waves-effect btn-flat"><i class="material-icons favorite" id="favorite_' + tweet_object.id + '">star</i></button>';
-							}
-							if (tweet_object.love == 0) {
-								div_user_tweet = div_user_tweet + '<button class="waves-effect btn-flat"><i class="material-icons not_love" id="love_' + tweet_object.id + '">favorite_border</i></button>';
-							} else {
-								div_user_tweet = div_user_tweet + '<button class="waves-effect btn-flat"><i class="material-icons love" id="love_' + tweet_object.id + '">favorite</i></button>';
-							}
-							div_user_tweet = div_user_tweet + '</div></div></div></div>';
-						});
+						if (data.data.length !== 0) {
+							$.each(data.data, function(index, tweet_object) {
+								if (tweet_object.avatar !== null) {
+									user_tweet_avatar = '<img class="avatar_img_tweet circle left" src="media/avatar/' + tweet_object.user_id + "/" + tweet_object.avatar + '">';
+								} else {
+									user_tweet_avatar = "";
+								}
+								div_user_tweet = div_user_tweet + '<div class="row center-align"><div class="col s12"><div class="card">' + user_tweet_avatar + '<i class="material-icons right remove_tweet" id="remove_tweet_' + tweet_object.id + '">close</i><div class="card-content"><span class="card-title">' + tweet_object.lastname + ' ' + tweet_object.firstname + '</span><br/><span class="card-title">@' + tweet_object.login + '</span><p><span id="only_tweet_content_' + tweet_object.id + '">' + tweet_object.content + '</span><i class="material-icons change_tweet_content" id="change_tweet_content_' + tweet_object.id + '">mode_edit</i></p></div><div class="card-action">';
+								if (tweet_object.favorite == 0) {
+									div_user_tweet = div_user_tweet + '<button class="waves-effect btn-flat favorite_button" id="favorite_' + tweet_object.id + '"><i class="material-icons not_favorite">star_border</i></button>';
+								} else {
+									div_user_tweet = div_user_tweet + '<button class="waves-effect btn-flat favorite_button" id="favorite_' + tweet_object.id + '"><i class="material-icons favorite">star</i></button>';
+								}
+								if (tweet_object.love == 0) {
+									div_user_tweet = div_user_tweet + '<button class="waves-effect btn-flat love_button" id="love_' + tweet_object.id + '"><i class="material-icons not_love">favorite_border</i></button>';
+								} else {
+									div_user_tweet = div_user_tweet + '<button class="waves-effect btn-flat love_button" id="love_' + tweet_object.id + '"><i class="material-icons love">favorite</i></button>';
+								}
+								div_user_tweet = div_user_tweet + '</div></div></div></div>';
+							});
+						} else {
+							div_user_tweet = '<div class="row center-align"><div class="col s12"><div class="card"><div class="card-content"><p>No tweet send !!</p></div><div class="card-action"></div></div></div></div>';
+						}
 						$('#user_tweet').html(div_user_tweet);
 					} else {
 						Materialize.toast('<p class="alert-failed">' + data.error + '<p>', 3000, 'rounded alert-failed');
@@ -232,8 +241,82 @@ $(document).ready(function(){
 			});
 		}
 	}
+	function remove_avatar () {
+		if ($.trim($("#div_error_remove_avatar").html()) === "") {
+			$.post(path_to_ajax, {action: 'remove_avatar', password_remove_avatar: $('#avatar_confirm_remove').val()}, function(data, textStatus) {
+				if (textStatus === "success") {
+					data = JSON.parse(data);
+					if (data.error === null) {
+						Materialize.toast('<p class="alert-success">Avatar removed successfully !!<p>', 3000, 'rounded alert-success');
+						$("#modal_remove_avatar").closeModal();
+						get_user_info();
+						get_user_tweet();
+					} else {
+						Materialize.toast('<p class="alert-failed">' + data.error + '<p>', 3000, 'rounded alert-failed');
+					}
+				} else {
+					Materialize.toast('<p class="alert-failed">a problem occurred while we send your id in the server !! Please contact the admin of the site !!<p>', 3000, 'rounded alert-failed');
+				}
+			});
+		}
+	}
 	get_user_info();
 	get_user_tweet();
+	$(document).on('click', '.favorite_button', function() {
+		$.post(path_to_ajax, {action: 'fav_unfav_love_unlove_tweet', id_tweet_to_fav_unfav_love_unlove: $(this).attr('id').substring(9), fav_or_love: "fav"}, function(data, textStatus) {
+			if (textStatus === "success") {
+					data = JSON.parse(data);
+					if (data.error === null) {
+						Materialize.toast('<p class="alert-success">Favorite of the tweet changed successfully !!<p>', 3000, 'rounded alert-success');
+						get_user_info();
+						get_user_tweet();
+					} else {
+						Materialize.toast('<p class="alert-failed">' + data.error + '<p>', 3000, 'rounded alert-failed');
+					}
+				} else {
+					Materialize.toast('<p class="alert-failed">a problem occurred while we send your favorite in the server !! Please contact the admin of the site !!<p>', 3000, 'rounded alert-failed');
+				}
+		});
+	});
+	$(document).on('click', '.love_button', function() {
+		$.post(path_to_ajax, {action: 'fav_unfav_love_unlove_tweet', id_tweet_to_fav_unfav_love_unlove: $(this).attr('id').substring(5), fav_or_love: "love"}, function(data, textStatus) {
+			if (textStatus === "success") {
+					data = JSON.parse(data);
+					if (data.error === null) {
+						Materialize.toast('<p class="alert-success">Love of the tweet changed successfully !!<p>', 3000, 'rounded alert-success');
+						get_user_info();
+						get_user_tweet();
+					} else {
+						Materialize.toast('<p class="alert-failed">' + data.error + '<p>', 3000, 'rounded alert-failed');
+					}
+				} else {
+					Materialize.toast('<p class="alert-failed">a problem occurred while we send your favorite in the server !! Please contact the admin of the site !!<p>', 3000, 'rounded alert-failed');
+				}
+		});
+	});
+	$(document).on('click', '#delete_avatar', function() {
+		$('#modal_remove_avatar').openModal();
+	});
+	$(document).on('keyup', '#avatar_confirm_remove', function() {
+		error_remove_avatar = "";
+		$("#div_error_remove_avatar").html('');
+		$("#div_error_remove_avatar").css('color', 'red');;
+		$(this).css('border-bottom', '1px solid #000000');
+		if ($(this).val() === "") {
+			error_remove_avatar = error_remove_avatar + "<p>Password empty !!</p>";
+			$(this).css('border-bottom', '1px solid #FF0000');
+		} else if ($(this).val().length < 5) {
+			error_remove_avatar = error_remove_avatar + "<p>Password must be at least 5 characters !!</p>";
+			$(this).css('border-bottom', '1px solid #FF0000');
+		} else {
+			$(this).css('border-bottom', '1px solid #008000');
+		}
+		$("#div_error_remove_avatar").html(error_remove_avatar);
+	});
+	$(document).on('click', '#apply_remove_avatar', function() {
+		remove_avatar();
+	});
+	press_enter("#avatar_confirm_remove", remove_avatar);
 	$(document).on('click', '.change_tweet_content', function() {
 		if (Number.isInteger(parseInt($(this).attr('id').substring(21)))) {
 			$('#tweet_id_to_change').html(parseInt($(this).attr('id').substring(21)));
