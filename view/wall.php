@@ -70,6 +70,22 @@
 		<div id="modal_user_pass"></div>
 		<div id="modal_user_remove"></div>
 		<div id="modal_tweet_remove"></div>
+		<div id="modal_change_tweet" class="modal bottom-fixed-footer">
+			<div class="modal-content">
+				<h1 class="title">Change this tweet !!</h1>
+				<div class="row">
+					<div class="input-field col s12">
+						<i class="material-icons prefix">message</i>
+						<textarea id="tweet_change" class="materialize-textarea" length="120" placeholder="Tweet"></textarea>
+					</div>
+				</div>
+				<div class="row" id="div_error_change_tweet"></div>
+			</div>
+			<div class="modal-footer end_button">
+				<button class="modal-action modal-close waves-effect btn-flat left" id="cancel_info_user">Cancel</button>
+				<button class="waves-effect btn-flat right" id="apply_change_tweet">Apply Changing</button>
+			</div>
+		</div>
 		<span id="user_id"><?php echo $_SESSION["id"]; ?></span>
 		<span id="tweet_id_to_remove"></span>
 		<span id="tweet_id_to_change"></span>
