@@ -530,7 +530,7 @@ class UsersController extends User
     {
         $bdd = new Bdd();
         if (!is_numeric($id_tweet)) {
-            selff:send_json("The id tweet must be an integer !!", null);
+            self::send_json("The id tweet must be an integer !!", null);
         } else {
             if (self::user_exist($_SESSION["id"])) {
                 $get_token_pass = $bdd->getBdd()->prepare('SELECT pass, token FROM users WHERE  id = :id AND active = 1');
@@ -565,6 +565,79 @@ class UsersController extends User
                 }
             } else {
                 self::send_json("User not found !!", null);
+            }
+        }
+    }
+
+    public function get_tweet_by_id($id_tweet)
+    {
+        $bdd = new Bdd();
+        if (!is_numeric($id_tweet)) {
+            self::send_json("The id tweet must be an integer !!", null);
+        } else {
+            if (self::user_exist($_SESSION["id"])) {
+                $get_token = $bdd->getBdd()->prepare('SELECT token FROM users WHERE  id = :id AND active = 1');
+                $get_token->bindParam(':id', $_SESSION["id"]);
+                $get_token->execute();
+                $user_token_pass = $get_token->fetch(\PDO::FETCH_ASSOC);
+                if ($user_token_pass["token"] === $_SESSION["token"]) {
+                    $get_tweet = $bdd->getBdd()->prepare("SELECT content FROM tweets WHERE id = :id AND user_id = :user_id AND active = 1");
+                    $get_tweet->bindParam(":id", $id_tweet);
+                    $get_tweet->bindParam(":user_id", $_SESSION["id"]);
+                    if ($get_tweet->execute()) {
+                        self::send_json(null, $get_tweet->fetch(\PDO::FETCH_ASSOC));
+                    } else {
+                        self::send_json("A problem occurred when we try to get your tweet in the database !! Please contact the admin of the site !!", null);
+                    }
+                } else {
+                    self::send_json("Bad token !! Please delete your cache and your cookie of this site !!", null);
+                }
+            } else {
+                self::send_json("User not found !!", null);
+            }
+        }
+    }
+
+    public function change_tweet($content_tweet_to_change, $id_tweet)
+    {
+        $bdd = new Bdd();
+        if (!is_numeric($id_tweet)) {
+            self::send_json("The id tweet must be an integer !!", null);
+        } else {
+            if (strlen($content) > 120) {
+                self::send_json("The content of the tweet must be les than 120 characters !!", null);
+            } else {
+                if (self::user_exist($_SESSION["id"])) {
+                    $get_token_pass = $bdd->getBdd()->prepare('SELECT token FROM users WHERE  id = :id AND active = 1');
+                    $get_token_pass->bindParam(':id', $_SESSION["id"]);
+                    $get_token_pass->execute();
+                    $user_token_pass = $get_token_pass->fetch(\PDO::FETCH_ASSOC);
+                    if ($user_token_pass["token"] === $_SESSION["token"]) {
+                        $check_tweet = $bdd->getBdd()->prepare("SELECT id FROM tweets WHERE id = :id AND user_id = :user_id AND active = 1");
+                        $check_tweet->bindParam(":id", $id_tweet);
+                        $check_tweet->bindParam(":user_id", $_SESSION["id"]);
+                        if ($check_tweet->execute()) {
+                            if ($check_tweet->fetch(\PDO::FETCH_ASSOC)) {
+                                $remove_tweet = $bdd->getBdd()->prepare("UPDATE tweets SET content = :content WHERE id = :id");
+                                $remove_tweet->bindParam(":content", $content_tweet_to_change);
+                                $remove_tweet->bindParam(":id", $id_tweet);
+                                if ($remove_tweet->execute()) {
+                                    self::send_json(null, null);
+                                } else {
+                                    self::send_json("A problem occurred when we try to change your tweet in the database !! Please contact the admin of the site !!", null);
+                                }
+                            } else {
+                                self::send_json("Bad tweet id !!", null);
+                            }
+                        } else {
+                            self::send_json("A problem occurred when we try to get your tweet in the database !! Please contact the admin of the site !!", null);
+                        }
+                    } else {
+                        self::send_json("Bad token !! Please delete your cache and your cookie of this site !!", null);
+                    }
+                } else {
+                    self::send_json("User not found !!", null);
+                }
             }
         }
     }
