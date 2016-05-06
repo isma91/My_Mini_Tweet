@@ -94,7 +94,8 @@ button:focus {
 #user_id,
 #form_avatar,
 #form_media_tweet,
-#tweet_id_to_remove {
+#tweet_id_to_remove,
+#user_count_tweet_pagination_number {
 	visibility: hidden;
 	display: none;
 }
