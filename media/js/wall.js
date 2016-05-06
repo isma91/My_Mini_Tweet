@@ -2,7 +2,7 @@
 /*jslint devel : true*/
 /*global $, document, this*/
 $(document).ready(function(){
-	var path_to_ajax, form_tweet_count_button, error_change_lastname_firstname, error_change_login, error_change_email, error_actual_pass, error_new_pass, error_confirm_new_pass, form_data_avatar, div_user_tweet, i, div_tweet_pagination;
+	var path_to_ajax, form_tweet_count_button, error_change_lastname_firstname, error_change_login, error_change_email, error_actual_pass, error_new_pass, error_confirm_new_pass, form_data_avatar, div_user_tweet, i, div_tweet_pagination, error_remove_tweet;
 	form_tweet_count_button = 0;
 	path_to_ajax = "public_api/index.php";
 	function press_enter (selector, go_function) {
@@ -39,6 +39,7 @@ $(document).ready(function(){
 					$('#user_created_at').html();
 					$("#modal_user_pass").html('<div id="modal_change_pass" class="modal bottom-fixed-footer"><div class="modal-content"><h1 class="title">Change your password here !!</h1><div class="row"><div class="input-field col s12"><i class="material-icons prefix">vpn_key</i><input id="user_actual_pass" type="password"><label for="user_actual_pass">Actual Password</label></div></div><div class="row"><div class="input-field col s12"><i class="material-icons prefix">vpn_key</i><input id="user_new_pass" type="password"><label for="user_new_pass">New Password</label></div></div><div class="row"><div class="input-field col s12"><i class="material-icons prefix">vpn_key</i><input id="user_confirm_new_pass" type="password"><label for="user_confirm_new_pass">Confirm New Password</label></div></div><div class="row" id="div_error_actual_pass"></div><div class="row" id="div_error_new_pass"></div><div class="row" id="div_error_confirm_new_pass"></div></div><div class="modal-footer end_button"><button class="modal-action modal-close waves-effect btn-flat left" id="cancel_info_user">Cancel</button><button class="waves-effect btn-flat right" id="apply_changing_pass">Apply Changing</button></div></div>');
 					$("#modal_user_remove").html('<div id="modal_remove_user" class="modal bottom-fixed-footer"><div class="modal-content"><h1 class="title">To remove your account, write your password !!</h1><div class="row"><div class="input-field col s12"><i class="material-icons prefix">vpn_key</i><input id="user_confirm_remove" type="password"><label for="user_confirm_remove">Password</label></div></div><div class="row" id="div_error_remove_user"></div></div><div class="modal-footer end_button"><button class="modal-action modal-close waves-effect btn-flat left" id="cancel_info_user">Cancel</button><button class="waves-effect btn-flat right" id="apply_remove_user">Apply Changing</button></div></div>');
+					$("#modal_tweet_remove").html('<div id="modal_remove_tweet" class="modal bottom-fixed-footer"><div class="modal-content"><h1 class="title">To remove this tweet, write your password !!</h1><div class="row"><div class="input-field col s12"><i class="material-icons prefix">vpn_key</i><input id="tweet_confirm_remove" type="password"><label for="tweet_confirm_remove">Password</label></div></div><div class="row" id="div_error_remove_tweet"></div></div><div class="modal-footer end_button"><button class="modal-action modal-close waves-effect btn-flat left" id="cancel_info_user">Cancel</button><button class="waves-effect btn-flat right" id="apply_remove_tweet">Apply Changing</button></div></div>');
 					if (data.data.tweet_user.tweet_user / 3 > 1) {
 						div_tweet_pagination = '<ul class="pagination center-align"><li><a href="#!"><i class="material-icons">chevron_left</i></a></li>';
 						for (i = 1; i <= Math.ceil(data.data.tweet_user.tweet_user / 3); i = i + 1) {
@@ -46,6 +47,8 @@ $(document).ready(function(){
 						}
 						div_tweet_pagination = div_tweet_pagination + '<li class="waves-effect"><a href="#!"><i class="material-icons">chevron_right</i></a></li></ul>';
 						$('#tweet_pagination').html(div_tweet_pagination);
+					} else {
+						$('#tweet_pagination').html('');
 					}
 				} else {
 					Materialize.toast('<p class="alert-failed">' + data.error + '<p>', 3000, 'rounded alert-failed');
@@ -62,7 +65,7 @@ $(document).ready(function(){
 					if (data.error === null) {
 						div_user_tweet = "";
 						$.each(data.data, function(index, tweet_object) {
-							div_user_tweet = div_user_tweet + '<div class="row center-align"><div class="col s12"><div class="card"><div class="card-content"><span class="card-title">' + $('#only_user_lastname_firstname').text() + '</span><br/><span class="card-title">@' + $('#only_user_login').text() + '</span><p>' + tweet_object.content + '</p></div><div class="card-action">';
+							div_user_tweet = div_user_tweet + '<div class="row center-align"><div class="col s12"><div class="card"><i class="material-icons right remove_tweet" id="remove_tweet_' + tweet_object.id + '">close</i><div class="card-content"><span class="card-title">' + $('#only_user_lastname_firstname').text() + '</span><br/><span class="card-title">@' + $('#only_user_login').text() + '</span><p>' + tweet_object.content + '</p></div><div class="card-action">';
 							if (tweet_object.favorite == 0) {
 								div_user_tweet = div_user_tweet + '<button class="waves-effect btn-flat"><i class="material-icons not_favorite" id="favorite_' + tweet_object.id + '">star_border</i></button>';
 							} else {
@@ -210,8 +213,53 @@ $(document).ready(function(){
 			});
 		}
 	}
+	function remove_tweet () {
+		if ($.trim($("#div_error_remove_tweet").html()) === "") {
+			$.post(path_to_ajax, {action: 'remove_tweet', id_tweet: $('#tweet_id_to_remove').text(), user_pass_remove_tweet: $('#tweet_confirm_remove').val()}, function(data, textStatus) {
+				if (textStatus === "success") {
+					data = JSON.parse(data);
+					if (data.error === null) {
+						Materialize.toast('<p class="alert-success">Tweet removed successfully !!<p>', 3000, 'rounded alert-success');
+						$("#modal_remove_tweet").closeModal();
+						get_user_info();
+						get_user_tweet();
+					} else {
+						Materialize.toast('<p class="alert-failed">' + data.error + '<p>', 3000, 'rounded alert-failed');
+					}
+				} else {
+					Materialize.toast('<p class="alert-failed">a problem occurred while we send the id tweet in the server !! Please contact the admin of the site !!<p>', 3000, 'rounded alert-failed');
+				}
+			});
+		}
+	}
 	get_user_info();
 	get_user_tweet();
+	$(document).on('click', '.remove_tweet', function() {
+		if (Number.isInteger(parseInt($(this).attr('id').substring(13)))) {
+			$('#tweet_id_to_remove').html(parseInt($(this).attr('id').substring(13)));
+			$('#modal_remove_tweet').openModal();
+		}
+	});
+	$(document).on('keyup', '#tweet_confirm_remove', function() {
+		error_remove_tweet = "";
+		$("#div_error_remove_tweet").html('');
+		$("#div_error_remove_tweet").css('color', 'red');;
+		$(this).css('border-bottom', '1px solid #000000');
+		if ($(this).val() === "") {
+			error_remove_tweet = error_remove_tweet + "<p>Password empty !!</p>";
+			$(this).css('border-bottom', '1px solid #FF0000');
+		} else if ($(this).val().length < 5) {
+			error_remove_tweet = error_remove_tweet + "<p>Password must be at least 5 characters !!</p>";
+			$(this).css('border-bottom', '1px solid #FF0000');
+		} else {
+			$(this).css('border-bottom', '1px solid #008000');
+		}
+		$("#div_error_remove_tweet").html(error_remove_tweet);
+	});
+	press_enter("#tweet_confirm_remove", remove_tweet);
+	$(document).on('click', '#apply_remove_tweet', function() {
+		remove_tweet();
+	});
 	$(document).on('click', '#display_hide_form_tweet', function() {
 		form_tweet_count_button = form_tweet_count_button + 1;
 		if (form_tweet_count_button % 2 === 0) {
