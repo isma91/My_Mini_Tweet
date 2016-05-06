@@ -510,7 +510,7 @@ class UsersController extends User
                 $get_token->execute();
                 $user_token = $get_token->fetch(\PDO::FETCH_ASSOC);
                 if ($user_token["token"] === $_SESSION["token"]) {
-                    $get_tweet = $bdd->getBdd()->prepare("SELECT * FROM (SELECT tweets.id, tweets.favorite, tweets.love, tweets.content, tweets.created_at, users.lastname, users.firstname, users.login FROM tweets INNER JOIN users ON tweets.user_id = users.id WHERE tweets.user_id = :user_id AND tweets.active = 1 ORDER BY tweets.id ASC LIMIT " . ($page * 3) . ", 3) AS sub_sql ORDER BY id DESC");
+                    $get_tweet = $bdd->getBdd()->prepare("SELECT * FROM (SELECT tweets.id, tweets.favorite, tweets.love, tweets.content, tweets.created_at, users.lastname, users.firstname, users.login, users.avatar, users.id AS `user_id` FROM tweets INNER JOIN users ON tweets.user_id = users.id WHERE tweets.user_id = :user_id AND tweets.active = 1 ORDER BY tweets.id ASC LIMIT " . ($page * 3) . ", 3) AS sub_sql ORDER BY id DESC");
                     $get_tweet->bindParam(":user_id", $id);
                     if ($get_tweet->execute()) {
                         self::send_json(null, $get_tweet->fetchAll(\PDO::FETCH_ASSOC));
@@ -638,6 +638,95 @@ class UsersController extends User
                 } else {
                     self::send_json("User not found !!", null);
                 }
+            }
+        }
+    }
+
+    public function remove_avatar($password)
+    {
+        if (empty($password)) {
+            self::send_json("Password empty !!", null);
+        } elseif (strlen($password) < 5) {
+            self::send_json("Password must be at least 5 characters !!", null);
+        }
+        else {
+            $bdd = new Bdd();
+            $check = $bdd->getBdd()->prepare("SELECT pass FROM users WHERE id = :id AND token = :token");
+            $check->bindParam(":id", $_SESSION["id"]);
+            $check->bindParam(":token", $_SESSION["token"]);
+            if ($check->execute()) {
+                $check_pass = $check->fetch(\PDO::FETCH_ASSOC);
+                if (!$this->_check_password($password, $check_pass["pass"])) {
+                    self::send_json("Wrong password !!", null);
+                } else {
+                    $bdd = new Bdd();
+                    $delete = $bdd->getBdd()->prepare('UPDATE users SET avatar = null WHERE id = :id AND token = :token AND active = 1');
+                    $delete->bindParam(':id', $_SESSION['id']);
+                    $delete->bindParam(':token', $_SESSION['token']);
+                    if ($delete->execute()) {
+                        self::send_json(null, null);
+                    } else {
+                        self::send_json("A problem occurred when we try to remove your avatar !! Please contact the admin of the site !!", null);
+                    }
+                }
+            }
+        }
+    }
+
+    public function fav_unfav_love_unlove_tweet($id_tweet, $fav_or_love)
+    {
+        $bdd = new Bdd();
+        if (!is_numeric($id_tweet)) {
+            self::send_json("The id tweet must be an integer !!", null);
+        } else {
+            if (self::user_exist($_SESSION["id"])) {
+                $get_token_pass = $bdd->getBdd()->prepare('SELECT token FROM users WHERE  id = :id AND active = 1');
+                $get_token_pass->bindParam(':id', $_SESSION["id"]);
+                $get_token_pass->execute();
+                $user_token_pass = $get_token_pass->fetch(\PDO::FETCH_ASSOC);
+                if ($user_token_pass["token"] === $_SESSION["token"]) {
+                    $check_tweet_fav_love = $bdd->getBdd()->prepare("SELECT id, favorite, love FROM tweets WHERE id = :id AND user_id = :user_id AND active = 1");
+                    $check_tweet_fav_love->bindParam(":id", $id_tweet);
+                    $check_tweet_fav_love->bindParam(":user_id", $_SESSION["id"]);
+                    if ($check_tweet_fav_love->execute()) {
+                        $tweet_fav_love = $check_tweet_fav_love->fetch(\PDO::FETCH_ASSOC);
+                        if ($tweet_fav_love) {
+                            if ($fav_or_love === "fav") {
+                                if ($tweet_fav_love["favorite"] == 0) {
+                                    $change_fav = $bdd->getBdd()->prepare("UPDATE tweets SET favorite = 1 WHERE id = :id");
+                                } else {
+                                    $change_fav = $bdd->getBdd()->prepare("UPDATE tweets SET favorite = 0 WHERE id = :id");
+                                }
+                                $change_fav->bindParam(":id", $id_tweet);
+                                if ($change_fav->execute()) {
+                                    self::send_json(null, null);
+                                } else {
+                                    self::send_json("A problem occurred when we try to change your favorite in the database !! Please contact the admin of the site !!", null);
+                                }
+                            } elseif ($fav_or_love === "love") {
+                                if ($tweet_fav_love["love"] == 0) {
+                                    $change_fav = $bdd->getBdd()->prepare("UPDATE tweets SET love = 1 WHERE id = :id");
+                                } else {
+                                    $change_fav = $bdd->getBdd()->prepare("UPDATE tweets SET love = 0 WHERE id = :id");
+                                }
+                                $change_fav->bindParam(":id", $id_tweet);
+                                if ($change_fav->execute()) {
+                                    self::send_json(null, null);
+                                } else {
+                                    self::send_json("A problem occurred when we try to change your love in the database !! Please contact the admin of the site !!", null);
+                                }
+                            }
+                        } else {
+                            self::send_json("Bad tweet id !!", null);
+                        }
+                    } else {
+                        self::send_json("A problem occurred when we try to get your tweet in the database !! Please contact the admin of the site !!", null);
+                    }
+                } else {
+                    self::send_json("Bad token !! Please delete your cache and your cookie of this site !!", null);
+                }
+            } else {
+                self::send_json("User not found !!", null);
             }
         }
     }
