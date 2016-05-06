@@ -75,7 +75,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `lastname`, `firstname`, `login`, `pass`, `email`, `token`, `avatar`, `created_at`, `active`) VALUES
-(1, 'Aydogmus', 'Ismail', 'isma91', '$2y$10$g/rKHiobJybzuvlK0bGndeLHf1xN/q6FtZMR1aLb8ofZ0p0QGdVgS', 'noatsuki@gmail.com', '518d3394c64bf8c2f1f0193370a311655a768bcb', 'ismail.png', '2016-05-03 12:49:09', 1);
+(1, 'Aydogmus', 'Ismail', 'isma91', '$2y$10$g/rKHiobJybzuvlK0bGndeLHf1xN/q6FtZMR1aLb8ofZ0p0QGdVgS', 'ismaydogmus@gmail.com', '518d3394c64bf8c2f1f0193370a311655a768bcb', 'ismail.png', '2016-05-03 12:49:09', 1);
 
 --
 -- Index pour les tables exportées
