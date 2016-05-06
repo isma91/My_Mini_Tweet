@@ -84,7 +84,8 @@ button:focus {
 #div_error_new_pass,
 #div_error_remove_user,
 #div_error_confirm_new_pass,
-#div_error_remove_tweet {
+#div_error_remove_tweet,
+#div_error_remove_avatar {
 	text-align: center;
 	color: #FF0000;
 	font-weight: bold;
@@ -159,4 +160,10 @@ button:focus {
 .remove_tweet {
 	background-color: #FF0000;
 	cursor: pointer;
+}
+.avatar_img_tweet {
+	max-width: 20%;
+	min-width: 20%;
+	max-height: 20%;
+	min-height: 20%;
 }
