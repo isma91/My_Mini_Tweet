@@ -49,6 +49,7 @@ $(document).ready(function(){
 						div_tweet_pagination = div_tweet_pagination + '</ul>';
 						$('#tweet_pagination').html(div_tweet_pagination);
 					} else {
+						$('#user_count_tweet_pagination_number').html(0);
 						$('#tweet_pagination').html('');
 					}
 				} else {
