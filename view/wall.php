@@ -109,5 +109,6 @@
 		<span id="user_id"><?php echo $_SESSION["id"]; ?></span>
 		<span id="tweet_id_to_remove"></span>
 		<span id="tweet_id_to_change"></span>
+		<span id="user_count_tweet_pagination_number"></span>
 	</body>
 	</html>
