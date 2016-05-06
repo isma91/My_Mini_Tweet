@@ -142,3 +142,14 @@ button:focus {
 .card .card-action a:hover {
 	color: #D3D3D3;
 }
+.not_favorite,
+.favorite {
+	color: #FFA500;
+}
+.not_love,
+.love {
+	color: #FF0000;
+}
+.pagination li.active {
+	background-color: #000000;
+}
