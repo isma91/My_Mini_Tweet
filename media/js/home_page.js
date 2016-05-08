@@ -104,6 +104,7 @@ $(document).ready(function(){
 	});
 	press_enter("#user_lastname", inscription);
 	press_enter("#user_firstname", inscription);
+	press_enter("#user_username", inscription);
 	press_enter("#user_email", inscription);
 	press_enter("#user_pass", inscription);
 	press_enter("#user_confirm_pass", inscription);
@@ -150,4 +151,15 @@ $(document).ready(function(){
 	});
 	press_enter("#user_login", connexion);
 	press_enter("#user_pass_sign_in", connexion);
+	function display_hide_mousedown_mouseup (selector_trigger, selector_input) {
+		$(document).on('mousedown', selector_trigger, function() {
+			$(selector_input).prop("type", "text");
+		});
+		$(document).on('mouseup', selector_trigger, function() {
+			$(selector_input).prop("type", "password");
+		});	
+	}
+	display_hide_mousedown_mouseup("#display_user_pass", "#user_pass");
+	display_hide_mousedown_mouseup("#display_user_confirm_pass", "#user_confirm_pass");
+	display_hide_mousedown_mouseup("#display_user_pass_sign_in", "#user_pass_sign_in");
 });
