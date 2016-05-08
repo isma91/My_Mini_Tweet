@@ -5,7 +5,7 @@
     <meta name="description" content="My_Mini_Tweet is a good way to test your own ego !!" />
     <title>Welcome to My_Mini_Tweet</title>
     <?php include "media.html" ?>
-<script src="media/js/home_page.js"></script>
+    <script src="media/js/home_page.js"></script>
 </head>
 <body>
     <div class="container" id="the_body">
@@ -55,6 +55,7 @@
                         <div class="row">
                             <div class="input-field col s12">
                                 <i class="material-icons prefix">vpn_key</i>
+                                <i class="material-icons right" id="display_user_pass">visibility</i>
                                 <input id="user_pass" type="password">
                                 <label for="user_pass">Password</label>
                             </div>
@@ -62,6 +63,7 @@
                         <div class="row">
                             <div class="input-field col s12">
                                 <i class="material-icons prefix">vpn_key</i>
+                                <i class="material-icons right" id="display_user_confirm_pass">visibility</i>
                                 <input id="user_confirm_pass" type="password">
                                 <label for="user_confirm_pass">Confirm Password</label>
                             </div>
@@ -87,6 +89,7 @@
                     <div class="row">
                         <div class="input-field col s12">
                             <i class="material-icons prefix">vpn_key</i>
+                            <i class="material-icons right" id="display_user_pass_sign_in">visibility</i>
                             <input id="user_pass_sign_in" type="password">
                             <label for="user_pass_sign_in">Password</label>
                         </div>
