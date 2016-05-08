@@ -103,7 +103,10 @@ button:focus {
 #change_lastname_firstname,
 #change_login,
 #change_email,
-.change_tweet_content {
+.change_tweet_content,
+#display_user_pass,
+#display_user_confirm_pass,
+#display_user_pass_sign_in {
 	cursor: pointer;
 	text-align: center;
 }
