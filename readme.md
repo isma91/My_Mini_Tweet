@@ -57,10 +57,11 @@ As you can see you can sign up or sign in, let's create a user !!
 ![Trying to create a user](how_to_use_images/my_mini_tweet_how_to_use2.png)  
 
 We can see that we forgot the login and our email adresse is invalid... We write in login foobar42, email foo@bar.com and password as testtest and we click in Sign Up !!
-![Trying to create a user](how_to_use_images/my_mini_tweet_how_to_use3.png)  
+Tops: if you forget the pass you wrtied, just hold the click on the eye in his right and you can see your password !!
+![Trying to login](how_to_use_images/my_mini_tweet_how_to_use3.png)  
 
 The sign in part display automatically !! We can now add our created user foobar42 or foo@bar.com and the password testtest.
-![Trying to create a user](how_to_use_images/my_mini_tweet_how_to_use4.png)  
+![The user wall](how_to_use_images/my_mini_tweet_how_to_use4.png)  
 
 Ok here is our wall, in the lest there is your avatar ( empty ), your lastname and firstname, your login, email, how many tweet you send and when you create your account  
 We also notice that we can change all this if we click in the pen in their right...  
@@ -68,19 +69,19 @@ The form tweet button is to display/hide the tweet form in the center bottom of 
 You can also logout and remove your account, but you need to write your password to validate this kind of dangerous action... Let's send a tweet !!
 You can't send more than 120 characters by tweet !! Don't forget that !!
 
-![Trying to create a user](how_to_use_images/my_mini_tweet_how_to_use5.png)  
+![Display the tweet](how_to_use_images/my_mini_tweet_how_to_use5.png)  
 
 Yay !! Our first tweet is here !! As you can see you can remove, change the content, favorite him or like him !! But first, let's add an avatar...Just click in the photo in the top left.  
 
-![Trying to create a user](how_to_use_images/my_mini_tweet_how_to_use6.png)  
+![Adding the avatar](how_to_use_images/my_mini_tweet_how_to_use6.png)  
 
 Ok we finally have an avatar !! And our tweet add the avatar automatically !! That's great !! Let's add several tweet, like 3 more tweet !!  
 
-![Trying to create a user](how_to_use_images/my_mini_tweet_how_to_use7.png)  
+![Display the pagination](how_to_use_images/my_mini_tweet_how_to_use7.png)  
 
 I hide the tweet form to display all the tweet in the screen !! But wait, the fourth tweet is in the last page because we paginate the tweets !! Every 3 tweets, we add a page display properly !!  
 
-![Trying to create a user](how_to_use_images/my_mini_tweet_how_to_use8.png)  
+![Display last page](how_to_use_images/my_mini_tweet_how_to_use8.png)  
 
 Ok so you know how to create a tweet, how to sign up and in, you can also edit all your personnal info wy clicking in the button or in the pen...
 Thank you to using this project !!
