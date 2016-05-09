@@ -32,7 +32,7 @@ sudo a2ensite display.prod.conf
 sudo service apache2 reload
 ```
 
-If you are want to test the project, go to your /etc/hosts file and :
+If you are want to test the project, go to your /etc/hosts file and add this  :
 ```127.0.0.1	www.my_mini_tweet.prod```
   
 After that you can go to your favorite web navigator and write :
